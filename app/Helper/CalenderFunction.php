@@ -94,18 +94,7 @@ function ShippingRulePickupBasedCalender($store_id = null,$type = null,$start_da
     
     $allow_after_days = $shipping->days ?? 1;
     
-    if($shipping->id==6 && time() > strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
-        $allow_after_days++;
-        
-        if(date('N')==5) {
-            $allow_after_days++;
-        }
-    }
-    elseif($shipping->id==6 && time() <= strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
-        if(date('N')==6) {
-            $allow_after_days++;
-        }
-    }
+ 
     
    
     
@@ -401,19 +390,7 @@ function ShippingRuleDeliveryBasedCalender($start_date = null, $end_date = null,
     // $allow_after_days = $shipping->days ?? 0;
     $allow_after_days = 0;
   
-    if($shipping->id==7 && time() > strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
-        $allow_after_days++;
-        
-        if(date('N')==5) {
-            $allow_after_days++;
-        }
-    }
-    elseif($shipping->id==7 && time() <= strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
-        if(date('N')==6) {
-            $allow_after_days++;
-        }
-    }
-    
+  
     
     $currentDate = now();
     $firstMonth = $currentDate->copy();
