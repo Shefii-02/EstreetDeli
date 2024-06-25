@@ -398,479 +398,479 @@ function showStoreTiming($store){
     
 }
 
-function showPickupCalender($store_id = null,$type = null){
+// function showPickupCalender($store_id = null,$type = null){
     
-    // $maxDaysshippingId = ShippingMethodFinding('pickup');
+//     // $maxDaysshippingId = ShippingMethodFinding('pickup');
     
-    // if($maxDaysshippingId != NULL){
-    //     $shipping   = Shipping::where('id', $maxDaysshippingId)->first();
-    // }
-    // else{
-        $shipping   = Shipping::where('order_type', 'pickup')->first();
-    // }
+//     // if($maxDaysshippingId != NULL){
+//     //     $shipping   = Shipping::where('id', $maxDaysshippingId)->first();
+//     // }
+//     // else{
+//         $shipping   = Shipping::where('order_type', 'pickup')->first();
+//     // }
     
     
-    $cuttoff    = $shipping->cut_off ?? strtotime('6:00 PM');
-    $store      = Store::with('store_timing', 'holidaytiming', 'holidaytiming.holiday')->where('status',1)->first();
-    $preparetime= $shipping->preperation_time * 3600 ?? env('PREPARATION_TIME');
+//     $cuttoff    = $shipping->cut_off ?? strtotime('6:00 PM');
+//     $store      = Store::with('store_timing', 'holidaytiming', 'holidaytiming.holiday')->where('status',1)->first();
+//     $preparetime= $shipping->preperation_time * 3600 ?? env('PREPARATION_TIME');
     
-    $preSkipDay = intval($preparetime/86400);
+//     $preSkipDay = intval($preparetime/86400);
     
-    $allow_after_days = $shipping->days ?? 1;
+//     $allow_after_days = $shipping->days ?? 1;
     
-    // if($shipping->id==6 && time() > strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
-    //     $allow_after_days++;
+//     // if($shipping->id==6 && time() > strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
+//     //     $allow_after_days++;
         
-    //     if(date('N')==5) {
-    //         $allow_after_days++;
-    //     }
-    // }
-    // elseif($shipping->id==6 && time() <= strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
-    //     if(date('N')==6) {
-    //         $allow_after_days++;
-    //     }
-    // }
+//     //     if(date('N')==5) {
+//     //         $allow_after_days++;
+//     //     }
+//     // }
+//     // elseif($shipping->id==6 && time() <= strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
+//     //     if(date('N')==6) {
+//     //         $allow_after_days++;
+//     //     }
+//     // }
     
-    $currentDate = now();
-    $firstMonth = $currentDate->copy();
-    // $secondMonth = $currentDate->copy()->addMonth();
-    $secondMonth = $currentDate->copy()->firstOfMonth()->addMonthNoOverflow();
+//     $currentDate = now();
+//     $firstMonth = $currentDate->copy();
+//     // $secondMonth = $currentDate->copy()->addMonth();
+//     $secondMonth = $currentDate->copy()->firstOfMonth()->addMonthNoOverflow();
     
-    $holidays = Holiday::with('holidaytiming')->where('the_date','>=',date('Y-m-d'))->pluck('the_date')->toArray();
+//     $holidays = Holiday::with('holidaytiming')->where('the_date','>=',date('Y-m-d'))->pluck('the_date')->toArray();
 
-    $result = '<div id="calendar-dropdown" class="position-absolute bg-light d-none text-center calendar-dropdown">
-            <div class="calendar">';
+//     $result = '<div id="calendar-dropdown" class="position-absolute bg-light d-none text-center calendar-dropdown">
+//             <div class="calendar">';
     
     
     
-    for ($month = 0; $month < 2; $month++) {
-        // $currentMonth = $currentDate->copy()->addMonth($month);  
-        $currentMonth = $month === 0 ? $firstMonth : $secondMonth;
-        $sec_month = $month === 1 ? 'style="display:none"' : '';
+//     for ($month = 0; $month < 2; $month++) {
+//         // $currentMonth = $currentDate->copy()->addMonth($month);  
+//         $currentMonth = $month === 0 ? $firstMonth : $secondMonth;
+//         $sec_month = $month === 1 ? 'style="display:none"' : '';
      
-        $result .= '
-                <div class="month month-'.$month.' month-id-'.$month.'" '.$sec_month.'>
-                    <div class="cal-title p-1  position-relative">';
-        $result .= $month === 0 ? '<i class="bi bi bi-chevron-right btn-cal-nxt  fs-6 end-0" data-mid="1"></i>' : '<i></i>';            
-        $result .= '<h6 class="text-center fw-bolder mt-1 mb-1">' . $currentMonth->format('F Y') . '</h6>';
-        $result .= $month === 1 ? '<i class="bi bi bi-chevron-left btn-cal-nxt  fs-6 start-0 " data-mid="0"></i></i>' : '<i></i>'; 
-        $result .= '</div>
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Sun</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Mon</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Tue</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Wed</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Thu</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Fri</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Sat</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
+//         $result .= '
+//                 <div class="month month-'.$month.' month-id-'.$month.'" '.$sec_month.'>
+//                     <div class="cal-title p-1  position-relative">';
+//         $result .= $month === 0 ? '<i class="bi bi bi-chevron-right btn-cal-nxt  fs-6 end-0" data-mid="1"></i>' : '<i></i>';            
+//         $result .= '<h6 class="text-center fw-bolder mt-1 mb-1">' . $currentMonth->format('F Y') . '</h6>';
+//         $result .= $month === 1 ? '<i class="bi bi bi-chevron-left btn-cal-nxt  fs-6 start-0 " data-mid="0"></i></i>' : '<i></i>'; 
+//         $result .= '</div>
+//                 <table class="table table-borderless">
+//                     <thead>
+//                         <tr>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Sun</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Mon</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Tue</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Wed</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Thu</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Fri</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Sat</th>
+//                         </tr>
+//                     </thead>
+//                     <tbody>';
     
-        $firstDayOfMonth = $currentMonth->copy()->startOfMonth();
-        $lastDayOfMonth = $currentMonth->copy()->endOfMonth();
-        $startDayOfWeek = $firstDayOfMonth->dayOfWeek;
-        $currentDate = $firstDayOfMonth->copy()->subDays($startDayOfWeek);
-        $today = \Carbon\Carbon::today();
-        $today_day = $today->format('w');
-        $isDisabled = $currentDate->lt($today);
-        $currentDateTime = Carbon::now();
-        $currentTime = strtotime($currentDateTime->toDateTimeString());
+//         $firstDayOfMonth = $currentMonth->copy()->startOfMonth();
+//         $lastDayOfMonth = $currentMonth->copy()->endOfMonth();
+//         $startDayOfWeek = $firstDayOfMonth->dayOfWeek;
+//         $currentDate = $firstDayOfMonth->copy()->subDays($startDayOfWeek);
+//         $today = \Carbon\Carbon::today();
+//         $today_day = $today->format('w');
+//         $isDisabled = $currentDate->lt($today);
+//         $currentDateTime = Carbon::now();
+//         $currentTime = strtotime($currentDateTime->toDateTimeString());
     
-        while ($currentDate <= $lastDayOfMonth) {
-            $result .= '<tr>';
-            for ($i = 0; $i < 7; $i++) {
-                $result .= '<td>';
-                if ($currentDate->month === $currentMonth->month && $currentDate->gte($firstDayOfMonth)) {
-                    $date = $currentDate->format('Y-m-d');
-                    $day_number = $currentDate->format('w');
-                    $isHoliday = in_array($date, $holidays);
+//         while ($currentDate <= $lastDayOfMonth) {
+//             $result .= '<tr>';
+//             for ($i = 0; $i < 7; $i++) {
+//                 $result .= '<td>';
+//                 if ($currentDate->month === $currentMonth->month && $currentDate->gte($firstDayOfMonth)) {
+//                     $date = $currentDate->format('Y-m-d');
+//                     $day_number = $currentDate->format('w');
+//                     $isHoliday = in_array($date, $holidays);
                     
-                    if($preSkipDay > 0){
-                        $allow_after = $today->copy()->addDay($allow_after_days+$preSkipDay);
-                    }
-                    else{
-                        $allow_after = $today->copy()->addDay($allow_after_days);  
-                    }
+//                     if($preSkipDay > 0){
+//                         $allow_after = $today->copy()->addDay($allow_after_days+$preSkipDay);
+//                     }
+//                     else{
+//                         $allow_after = $today->copy()->addDay($allow_after_days);  
+//                     }
                     
                     
-                    $isDisabled = $currentDate->lt($allow_after);
-                    $isToday = $currentDate->isSameDay($today);
-                    $store_workingday = $store->store_timing->where('day', $day_number)->first();
+//                     $isDisabled = $currentDate->lt($allow_after);
+//                     $isToday = $currentDate->isSameDay($today);
+//                     $store_workingday = $store->store_timing->where('day', $day_number)->first();
     
-                    if ($store_workingday) {
-                        $opening_time = strtotime($store_workingday->open);
-                        // $close_time = $store_workingday->close;
-                        $availableTime_on = strtotime($store_workingday->open) + $preparetime;
-                        // $availableTime_to = strtotime($store_workingday->close) - $preparetime;
-                        $availableTime_to = strtotime($cuttoff);
-                    }
+//                     if ($store_workingday) {
+//                         $opening_time = strtotime($store_workingday->open);
+//                         // $close_time = $store_workingday->close;
+//                         $availableTime_on = strtotime($store_workingday->open) + $preparetime;
+//                         // $availableTime_to = strtotime($store_workingday->close) - $preparetime;
+//                         $availableTime_to = strtotime($cuttoff);
+//                     }
                     
     
-                    $isAvailable = true;
-                    $isTimeExceeded = false;
+//                     $isAvailable = true;
+//                     $isTimeExceeded = false;
                     
                     
-                    ///////////////Manual date skip code/////////////////////////////////
+//                     ///////////////Manual date skip code/////////////////////////////////
                     
-                    // if(time() >= strtotime('2023-12-18 17:55:00') && ($currentDate->format('Y-m-d') == '2023-09-18' || $currentDate->format('Y-m-d') == '2023-09-19')) {
-                    //     $isDisabled = true;
-                    // }
+//                     // if(time() >= strtotime('2023-12-18 17:55:00') && ($currentDate->format('Y-m-d') == '2023-09-18' || $currentDate->format('Y-m-d') == '2023-09-19')) {
+//                     //     $isDisabled = true;
+//                     // }
                    
-                    // if($isToday && date('Y-m-d') == '2023-12-24') {
-                    //     $isDisabled = true;
-                    // }
+//                     // if($isToday && date('Y-m-d') == '2023-12-24') {
+//                     //     $isDisabled = true;
+//                     // }
                     
-                    ///////////////Manual date skip code/////////////////////////////////
+//                     ///////////////Manual date skip code/////////////////////////////////
     
-                    if (!$isHoliday && $store_workingday && !$isDisabled) {
-                        if ($isToday && ($currentTime <= $availableTime_to)) {
+//                     if (!$isHoliday && $store_workingday && !$isDisabled) {
+//                         if ($isToday && ($currentTime <= $availableTime_to)) {
                             
-                                if($currentTime > $opening_time){
-                                    $RoundavailableTime_on = $currentTime + $preparetime;
-                                    $availableTime_on = roundTimeToNearestInterval($RoundavailableTime_on, 900);
-                                }
-                            if($availableTime_on <= $availableTime_to){
-                                $result .= '<span class="date today valid_date" data-start="'.date('H:i',$availableTime_on).'" data-end="'.date('H:i',$availableTime_to).'" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                            } 
-                            else {
-                                $isTimeExceeded = true;
-                            }
-                        } 
-                        else {
-                            $isTimeExceeded = true;
-                        }
-                    }
+//                                 if($currentTime > $opening_time){
+//                                     $RoundavailableTime_on = $currentTime + $preparetime;
+//                                     $availableTime_on = roundTimeToNearestInterval($RoundavailableTime_on, 900);
+//                                 }
+//                             if($availableTime_on <= $availableTime_to){
+//                                 $result .= '<span class="date today valid_date" data-start="'.date('H:i',$availableTime_on).'" data-end="'.date('H:i',$availableTime_to).'" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                             } 
+//                             else {
+//                                 $isTimeExceeded = true;
+//                             }
+//                         } 
+//                         else {
+//                             $isTimeExceeded = true;
+//                         }
+//                     }
     
-                    if ($isHoliday) {
-                        $holi_Day = Holiday::where('the_date', $date)->first();
-                        $checkStoreAvailability = Holiday::leftJoin('holiday_timings', 'holiday_timings.holiday_id', 'holidays.id')
-                            ->where('store_id', $store_id)
-                            ->where('the_date', $date)
-                            ->first();
+//                     if ($isHoliday) {
+//                         $holi_Day = Holiday::where('the_date', $date)->first();
+//                         $checkStoreAvailability = Holiday::leftJoin('holiday_timings', 'holiday_timings.holiday_id', 'holidays.id')
+//                             ->where('store_id', $store_id)
+//                             ->where('the_date', $date)
+//                             ->first();
     
-                        if (!$checkStoreAvailability || $isDisabled) {
-                            $result .= '<span title="' . $holi_Day->name . '- Store off day" class="date holiday">' . $currentDate->format('j') . '</span>';
-                        } 
-                        elseif($isToday && strtotime($checkStoreAvailability->cut_off) <= time()){
-                            $result .= '<span title="Time exceeded. Today is not available" class="date holiday disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                        }
-                        else {
+//                         if (!$checkStoreAvailability || $isDisabled) {
+//                             $result .= '<span title="' . $holi_Day->name . '- Store off day" class="date holiday">' . $currentDate->format('j') . '</span>';
+//                         } 
+//                         elseif($isToday && strtotime($checkStoreAvailability->cut_off) <= time()){
+//                             $result .= '<span title="Time exceeded. Today is not available" class="date holiday disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                         }
+//                         else {
                             
-                            $opening_time = $checkStoreAvailability->online_pickup_open;
-                            $close_time = $checkStoreAvailability->online_pickup_close;
-                            // $close_time = $cuttoff;
+//                             $opening_time = $checkStoreAvailability->online_pickup_open;
+//                             $close_time = $checkStoreAvailability->online_pickup_close;
+//                             // $close_time = $cuttoff;
                             
                             
-                            if($opening_time == null){
-                                $opening_time = $store_workingday->open;
-                            }
-                            if($close_time == null){
-                                // $close_time = $store_workingday->close;
-                                $close_time = $cuttoff;
-                            }
+//                             if($opening_time == null){
+//                                 $opening_time = $store_workingday->open;
+//                             }
+//                             if($close_time == null){
+//                                 // $close_time = $store_workingday->close;
+//                                 $close_time = $cuttoff;
+//                             }
                     
-                            $availableTime_on = strtotime($opening_time) + $preparetime;
-                            $availableTime_to = strtotime($close_time);
+//                             $availableTime_on = strtotime($opening_time) + $preparetime;
+//                             $availableTime_to = strtotime($close_time);
                                
-                            if($isToday){
-                                $currentTime = $currentTime + $preparetime;
-                            }
+//                             if($isToday){
+//                                 $currentTime = $currentTime + $preparetime;
+//                             }
                            
-                            if($isToday && $currentTime > $opening_time && $currentTime <= $availableTime_to){
-                                $RoundavailableTime_on = $currentTime;
-                                $availableTime_on = roundTimeToNearestInterval($RoundavailableTime_on, 900);
-                                $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow" data-start="'.date('H:i',$availableTime_on).'" data-end="'.date('H:i',$availableTime_to).'"  data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
+//                             if($isToday && $currentTime > $opening_time && $currentTime <= $availableTime_to){
+//                                 $RoundavailableTime_on = $currentTime;
+//                                 $availableTime_on = roundTimeToNearestInterval($RoundavailableTime_on, 900);
+//                                 $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow" data-start="'.date('H:i',$availableTime_on).'" data-end="'.date('H:i',$availableTime_to).'"  data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
                               
-                            }
-                            elseif($isToday && $currentTime > $availableTime_to){
+//                             }
+//                             elseif($isToday && $currentTime > $availableTime_to){
                           
-                                $result .= '<span title="Time exceeded. Today is not available" class="date holiday disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                            }
-                            else{
+//                                 $result .= '<span title="Time exceeded. Today is not available" class="date holiday disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                             }
+//                             else{
                                
-                                $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow" data-start="'.date('H:i',$availableTime_on).'" data-end="'.date('H:i',$availableTime_to).'"  data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
-                            }
-                        }
-                    } elseif ($isDisabled || !$store_workingday) {
-                        $result .= '<span title="Store not available" class="date disabled">' . $currentDate->format('j') . '</span>';
-                    } elseif ($isAvailable && !$isToday) {
-                        $result .= '<a href="#" class="valid_date date" data-start="'.date('H:i',$availableTime_on).'" data-end="'.date('H:i',$availableTime_to).'"  data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
-                    } elseif ($isTimeExceeded) {
-                        $result .= '<span title="Time exceeded. Today is not available" class="date holiday disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                    }
-                } else {
-                    $result .= '<span class="date disabled">' . $currentDate->format('j') . '</span>';
-                }
+//                                 $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow" data-start="'.date('H:i',$availableTime_on).'" data-end="'.date('H:i',$availableTime_to).'"  data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
+//                             }
+//                         }
+//                     } elseif ($isDisabled || !$store_workingday) {
+//                         $result .= '<span title="Store not available" class="date disabled">' . $currentDate->format('j') . '</span>';
+//                     } elseif ($isAvailable && !$isToday) {
+//                         $result .= '<a href="#" class="valid_date date" data-start="'.date('H:i',$availableTime_on).'" data-end="'.date('H:i',$availableTime_to).'"  data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
+//                     } elseif ($isTimeExceeded) {
+//                         $result .= '<span title="Time exceeded. Today is not available" class="date holiday disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                     }
+//                 } else {
+//                     $result .= '<span class="date disabled">' . $currentDate->format('j') . '</span>';
+//                 }
     
-                $result .= '</td>';
-                $currentDate = $currentDate->addDay();
-            }
-            $result .= '</tr>';
-        }
+//                 $result .= '</td>';
+//                 $currentDate = $currentDate->addDay();
+//             }
+//             $result .= '</tr>';
+//         }
     
-        $result .= '</tbody>
-                </table>
-            </div>';
-    }
-    
-    
-    $result .= '</div></div>';
-    //         <span class="text-center cursor-pointer fw-bold show-more-dates">More dates</a></div>';
+//         $result .= '</tbody>
+//                 </table>
+//             </div>';
+//     }
     
     
+//     $result .= '</div></div>';
+//     //         <span class="text-center cursor-pointer fw-bold show-more-dates">More dates</a></div>';
     
-    return $result;
+    
+    
+//     return $result;
 
-}
-/*************** DELIVERY CALENDAR *****************/
-function showDeiveryCalender($store_id = null,$type = null){
-    // $maxDaysshippingId = ShippingMethodFinding('delivery');
-    // if($maxDaysshippingId != NULL){
-    //     $shipping   = Shipping::where('id', $maxDaysshippingId)->first();
-    // }
-    // else{
-        $shipping   = Shipping::where('order_type', 'delivery')->first();
-    // }
+// }
+// /*************** DELIVERY CALENDAR *****************/
+// function showDeiveryCalender($store_id = null,$type = null){
+//     // $maxDaysshippingId = ShippingMethodFinding('delivery');
+//     // if($maxDaysshippingId != NULL){
+//     //     $shipping   = Shipping::where('id', $maxDaysshippingId)->first();
+//     // }
+//     // else{
+//         $shipping   = Shipping::where('order_type', 'delivery')->first();
+//     // }
 
-    $preparetime= $shipping->preperation_time * 3600 ?? env('PREPARATION_TIME');
-    $preSkipDay = (int)($preparetime/86400);
+//     $preparetime= $shipping->preperation_time * 3600 ?? env('PREPARATION_TIME');
+//     $preSkipDay = (int)($preparetime/86400);
 
-    $cuttoff = strtotime($shipping->cut_off) ?? strtotime('2:30 PM');
+//     $cuttoff = strtotime($shipping->cut_off) ?? strtotime('2:30 PM');
     
    
-    $allow_after_days = $shipping->days ?? 1;
+//     $allow_after_days = $shipping->days ?? 1;
     
-    // if($shipping->id==7 && time() > strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
-    //     $allow_after_days++;
+//     // if($shipping->id==7 && time() > strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
+//     //     $allow_after_days++;
         
-    //     if(date('N')==5) {
-    //         $allow_after_days++;
-    //     }
-    // }
-    // elseif($shipping->id==7 && time() <= strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
-    //     if(date('N')==6) {
-    //         $allow_after_days++;
-    //     }
-    // }
+//     //     if(date('N')==5) {
+//     //         $allow_after_days++;
+//     //     }
+//     // }
+//     // elseif($shipping->id==7 && time() <= strtotime(date('Y-m-d').' '.$shipping->cut_off)) {
+//     //     if(date('N')==6) {
+//     //         $allow_after_days++;
+//     //     }
+//     // }
     
-    $currentDate = now();
-    $firstMonth = $currentDate->copy();
-    // $secondMonth = $currentDate->copy()->addMonth();
-    $secondMonth = $currentDate->copy()->firstOfMonth()->addMonthNoOverflow();
-    $holidays = Holiday::with('holidaytiming')->where('the_date','>=',date('Y-m-d'))->pluck('the_date')->toArray();
+//     $currentDate = now();
+//     $firstMonth = $currentDate->copy();
+//     // $secondMonth = $currentDate->copy()->addMonth();
+//     $secondMonth = $currentDate->copy()->firstOfMonth()->addMonthNoOverflow();
+//     $holidays = Holiday::with('holidaytiming')->where('the_date','>=',date('Y-m-d'))->pluck('the_date')->toArray();
     
-    $result = '<div id="calendar-dropdown" class="position-absolute bg-light d-none text-center calendar-dropdown">
-        <div class="calendar">';
-    for ($month = 0; $month < 2; $month++) {
-        $currentMonth = $month === 0 ? $firstMonth : $secondMonth;
-              $sec_month = $month === 1 ? 'style="display:none"' : '';
+//     $result = '<div id="calendar-dropdown" class="position-absolute bg-light d-none text-center calendar-dropdown">
+//         <div class="calendar">';
+//     for ($month = 0; $month < 2; $month++) {
+//         $currentMonth = $month === 0 ? $firstMonth : $secondMonth;
+//               $sec_month = $month === 1 ? 'style="display:none"' : '';
       
                 
-         $result .= '
-                <div class="month month-'.$month.' month-id-'.$month.'" '.$sec_month.' >
-                    <div class="cal-title p-1  position-relative">';
-        $result .= $month === 0 ? '<i class="bi bi-chevron-right btn-cal-nxt  fs-6 end-0" data-mid="1"></i>' : '<i></i>';            
-        $result .= '<h6 class="text-center fw-bolder mt-1 mb-1">' . $currentMonth->format('F Y') . '</h6>';
-        $result .= $month === 1 ? '<i class="bi bi bi-chevron-left btn-cal-nxt  fs-6 start-0" data-mid="0"></i>' : '<i></i>'; 
-        $result .= '</div>       
+//          $result .= '
+//                 <div class="month month-'.$month.' month-id-'.$month.'" '.$sec_month.' >
+//                     <div class="cal-title p-1  position-relative">';
+//         $result .= $month === 0 ? '<i class="bi bi-chevron-right btn-cal-nxt  fs-6 end-0" data-mid="1"></i>' : '<i></i>';            
+//         $result .= '<h6 class="text-center fw-bolder mt-1 mb-1">' . $currentMonth->format('F Y') . '</h6>';
+//         $result .= $month === 1 ? '<i class="bi bi bi-chevron-left btn-cal-nxt  fs-6 start-0" data-mid="0"></i>' : '<i></i>'; 
+//         $result .= '</div>       
                 
                 
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Sun</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Mon</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Tue</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Wed</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Thu</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Fri</th>
-                            <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Sat</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
+//                 <table class="table table-borderless">
+//                     <thead>
+//                         <tr>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Sun</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Mon</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Tue</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Wed</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Thu</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Fri</th>
+//                             <th scope="col" class="calendar-f-14 calendar-head calendar-primary">Sat</th>
+//                         </tr>
+//                     </thead>
+//                     <tbody>';
     
-        $firstDayOfMonth = $currentMonth->copy()->startOfMonth();
-        $lastDayOfMonth = $currentMonth->copy()->endOfMonth();
-        $startDayOfWeek = $firstDayOfMonth->dayOfWeek;
-        $currentDate = $firstDayOfMonth->copy()->subDays($startDayOfWeek);
-        $today = \Carbon\Carbon::today();
-        $today_day = $today->format('w');
-        $isDisabled = $currentDate->lt($today);
-        $tomorrow = $today->copy()->addDay();
-        $tomorrow_day = $tomorrow->format('w');
-        $currentDateTime = Carbon::now();
-        $currentTime = strtotime($currentDateTime->toDateTimeString());
+//         $firstDayOfMonth = $currentMonth->copy()->startOfMonth();
+//         $lastDayOfMonth = $currentMonth->copy()->endOfMonth();
+//         $startDayOfWeek = $firstDayOfMonth->dayOfWeek;
+//         $currentDate = $firstDayOfMonth->copy()->subDays($startDayOfWeek);
+//         $today = \Carbon\Carbon::today();
+//         $today_day = $today->format('w');
+//         $isDisabled = $currentDate->lt($today);
+//         $tomorrow = $today->copy()->addDay();
+//         $tomorrow_day = $tomorrow->format('w');
+//         $currentDateTime = Carbon::now();
+//         $currentTime = strtotime($currentDateTime->toDateTimeString());
       
-        while ($currentDate <= $lastDayOfMonth) {
-            $result .= '<tr>';
-            for ($i = 0; $i < 7; $i++) {
-                $result .= '<td>';
-                if ($currentDate->month === $currentMonth->month && $currentDate->gte($firstDayOfMonth)) {
-                    $date = $currentDate->format('Y-m-d');
-                    $day_number = $currentDate->format('w');
-                    $day_name = strtolower($currentDate->format('l'));
-                    $isHoliday = in_array($date, $holidays);
+//         while ($currentDate <= $lastDayOfMonth) {
+//             $result .= '<tr>';
+//             for ($i = 0; $i < 7; $i++) {
+//                 $result .= '<td>';
+//                 if ($currentDate->month === $currentMonth->month && $currentDate->gte($firstDayOfMonth)) {
+//                     $date = $currentDate->format('Y-m-d');
+//                     $day_number = $currentDate->format('w');
+//                     $day_name = strtolower($currentDate->format('l'));
+//                     $isHoliday = in_array($date, $holidays);
     
-                    if($preSkipDay > 0){
-                        $allow_after = $today->copy()->addDay($allow_after_days+$preSkipDay);
-                    }
-                    else{
-                        $allow_after = $today->copy()->addDay($allow_after_days);  
-                    }
+//                     if($preSkipDay > 0){
+//                         $allow_after = $today->copy()->addDay($allow_after_days+$preSkipDay);
+//                     }
+//                     else{
+//                         $allow_after = $today->copy()->addDay($allow_after_days);  
+//                     }
                     
                     
                       
-                    // $allow_after = $today->copy()->addDay($allow_after_days);
-                    $isDisabled = $currentDate->lt($allow_after);
-                    $isTomorrow = $currentDate->isSameDay($tomorrow);
-                    $isToday = $currentDate->isSameDay($today);
-                    $day_available = $shipping->$day_name == 1;
+//                     // $allow_after = $today->copy()->addDay($allow_after_days);
+//                     $isDisabled = $currentDate->lt($allow_after);
+//                     $isTomorrow = $currentDate->isSameDay($tomorrow);
+//                     $isToday = $currentDate->isSameDay($today);
+//                     $day_available = $shipping->$day_name == 1;
     
-                    $isAvailable = true;
-                    $isTimeExceeded = false;
+//                     $isAvailable = true;
+//                     $isTimeExceeded = false;
                     
                     
-                    $currentDayOfWeek = strtolower($currentDate->format('l'));
+//                     $currentDayOfWeek = strtolower($currentDate->format('l'));
     
-                    if($shipping->{$currentDayOfWeek} == 0){
-                        $isDisabled = true;
-                    }
+//                     if($shipping->{$currentDayOfWeek} == 0){
+//                         $isDisabled = true;
+//                     }
     
                     
-                    if (!$isHoliday && $day_available && !$isDisabled) {
-                        if ($isToday && ($currentTime < $cuttoff)) {
-                            $result .= '<span class="date today valid_date" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                        } 
-                        // elseif ($isTomorrow && ($currentTime < $cuttoff)) {
-                        //     $result .= '<span class="date valid_date" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                        // }
-                        else {
-                            $isTimeExceeded = true;
+//                     if (!$isHoliday && $day_available && !$isDisabled) {
+//                         if ($isToday && ($currentTime < $cuttoff)) {
+//                             $result .= '<span class="date today valid_date" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                         } 
+//                         // elseif ($isTomorrow && ($currentTime < $cuttoff)) {
+//                         //     $result .= '<span class="date valid_date" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                         // }
+//                         else {
+//                             $isTimeExceeded = true;
                            
-                        }
-                    }
+//                         }
+//                     }
     
-                    if ($isHoliday) {
-                        $holi_Day = Holiday::where('the_date', $date)->first();
-                        $checkStoreAvailability = Holiday::where('the_date', $date)->where('block_delivery', 0)->first();
+//                     if ($isHoliday) {
+//                         $holi_Day = Holiday::where('the_date', $date)->first();
+//                         $checkStoreAvailability = Holiday::where('the_date', $date)->where('block_delivery', 0)->first();
     
-                        if (!$checkStoreAvailability || $isDisabled) {
-                            $result .= '<span title="' . $holi_Day->name . '- Off day" class="date holiday">' . $currentDate->format('j') . '</span>';
-                        } else {
-                            $holi_cuttoff = strtotime($holi_Day->cut_off);
+//                         if (!$checkStoreAvailability || $isDisabled) {
+//                             $result .= '<span title="' . $holi_Day->name . '- Off day" class="date holiday">' . $currentDate->format('j') . '</span>';
+//                         } else {
+//                             $holi_cuttoff = strtotime($holi_Day->cut_off);
                             
-                            if($isToday){
-                                $currentTime = $currentTime + $preparetime;
-                            }
+//                             if($isToday){
+//                                 $currentTime = $currentTime + $preparetime;
+//                             }
                            
-                            if($isToday && $currentTime > $opening_time && $currentTime <= $holi_cuttoff){
-                                $RoundavailableTime_on = $currentTime;
-                                $availableTime_on = roundTimeToNearestInterval($RoundavailableTime_on, 900);
-                                $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow"  data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
+//                             if($isToday && $currentTime > $opening_time && $currentTime <= $holi_cuttoff){
+//                                 $RoundavailableTime_on = $currentTime;
+//                                 $availableTime_on = roundTimeToNearestInterval($RoundavailableTime_on, 900);
+//                                 $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow"  data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
                               
-                            }
-                            elseif($isToday && $currentTime > $holi_cuttoff){
+//                             }
+//                             elseif($isToday && $currentTime > $holi_cuttoff){
                           
-                                $result .= '<span title="Time exceeded. Today is not available" class="date holiday disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                            }
-                            else{
+//                                 $result .= '<span title="Time exceeded. Today is not available" class="date holiday disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                             }
+//                             else{
                                
-                                $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow"   data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
-                            }
+//                                 $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow"   data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
+//                             }
     
-                            // if ($currentTime < $holi_cuttoff) {
-                            //     $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
-                            // } else {
-                            //     $result .= '<span title="Time exceeded. Date not available" class="date holiday disabled " data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                            // }
-                        }
-                    } elseif ( $isToday && ($isTimeExceeded || $isDisabled)) {
-                        $result .= '<span title="Time exceeded. Today is not available" class="date today disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                    } elseif ($isDisabled || !$day_available) {
-                        $result .= '<span title="Off day.." class="date disabled">' . $currentDate->format('j') . '</span>';
-                    } elseif ($isAvailable && !$isToday) {
-                        $result .= '<a href="#" class="valid_date date" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
-                    } elseif ($isTimeExceeded) {
-                        $result .= '<span title="Time exceeded. This day  not available" class="date  disabled " data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
-                    }
-                } else {
-                    $result .= '<span class="date disabled">' . $currentDate->format('j') . '</span>';
-                }
+//                             // if ($currentTime < $holi_cuttoff) {
+//                             //     $result .= '<a href="#" title="' . $holi_Day->name . '" class="valid_date date holiday-allow" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
+//                             // } else {
+//                             //     $result .= '<span title="Time exceeded. Date not available" class="date holiday disabled " data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                             // }
+//                         }
+//                     } elseif ( $isToday && ($isTimeExceeded || $isDisabled)) {
+//                         $result .= '<span title="Time exceeded. Today is not available" class="date today disabled" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                     } elseif ($isDisabled || !$day_available) {
+//                         $result .= '<span title="Off day.." class="date disabled">' . $currentDate->format('j') . '</span>';
+//                     } elseif ($isAvailable && !$isToday) {
+//                         $result .= '<a href="#" class="valid_date date" data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</a>';
+//                     } elseif ($isTimeExceeded) {
+//                         $result .= '<span title="Time exceeded. This day  not available" class="date  disabled " data-date="' . $currentDate->format('Y-m-d') . '">' . $currentDate->format('j') . '</span>';
+//                     }
+//                 } else {
+//                     $result .= '<span class="date disabled">' . $currentDate->format('j') . '</span>';
+//                 }
     
-                $result .= '</td>';
-                $currentDate = $currentDate->addDay();
-            }
-            $result .= '</tr>';
-        }
+//                 $result .= '</td>';
+//                 $currentDate = $currentDate->addDay();
+//             }
+//             $result .= '</tr>';
+//         }
     
-        $result .= '</tbody>
-                </table>
-            </div>';
-    }
+//         $result .= '</tbody>
+//                 </table>
+//             </div>';
+//     }
     
-    $result .= '</div>
+//     $result .= '</div>
     
             
-            </div>';
+//             </div>';
 
-return $result;
-}
+// return $result;
+// }
 
 
-/*****************************************************************************/
-function roundTimeToNearestInterval($timestamp, $interval) {
-    // Calculate the number of intervals since Unix epoch
-    $roundedTimestamp = round($timestamp / $interval) * $interval;
-    return $roundedTimestamp;
-}
+// /*****************************************************************************/
+// function roundTimeToNearestInterval($timestamp, $interval) {
+//     // Calculate the number of intervals since Unix epoch
+//     $roundedTimestamp = round($timestamp / $interval) * $interval;
+//     return $roundedTimestamp;
+// }
 
-function ShippingMethodFinding($delivery_type){
+// function ShippingMethodFinding($delivery_type){
     
-    $session_string = session('session_string');						
-    $basket_items   = Basket::where('session',$session_string)->where('status',0)->first();
-    $items          = Item::with('productShipping','productShipping.shipping')->where('basket_id',$basket_items->id)->get();
-    $maxShippingDays = [];
+//     $session_string = session('session_string');						
+//     $basket_items   = Basket::where('session',$session_string)->where('status',0)->first();
+//     $items          = Item::with('productShipping','productShipping.shipping')->where('basket_id',$basket_items->id)->get();
+//     $maxShippingDays = [];
 
-    $maxDaysshippingId = '';
-    $maxDays           = 0;
-    $maxPrepration     = 0;
+//     $maxDaysshippingId = '';
+//     $maxDays           = 0;
+//     $maxPrepration     = 0;
         
-    foreach ($items as $item) {
+//     foreach ($items as $item) {
         
-        // Iterate through the product shipping methods for the item
-        foreach ($item->productShipping as $productShipping) {
+//         // Iterate through the product shipping methods for the item
+//         foreach ($item->productShipping as $productShipping) {
           
-            $shippingMethod = $productShipping->shipping;
-            // $shippingMethod = $productShipping->shipping->where(function ($query) use ($delivery_type) {
-            //                                         $query->where('order_type', $delivery_type)
-            //                                               ->orWhere('order_type', '=', 'both');
-            //                                     })
-            //                                     ->where('name','!=','Pickup')
-            //                                     ->where('name','!=','Delivery')->get();
+//             $shippingMethod = $productShipping->shipping;
+//             // $shippingMethod = $productShipping->shipping->where(function ($query) use ($delivery_type) {
+//             //                                         $query->where('order_type', $delivery_type)
+//             //                                               ->orWhere('order_type', '=', 'both');
+//             //                                     })
+//             //                                     ->where('name','!=','Pickup')
+//             //                                     ->where('name','!=','Delivery')->get();
                                   
             
-            if($shippingMethod){                           
-                if ($shippingMethod->name != 'Pickup' && $shippingMethod->name != 'Delivery' && ($shippingMethod->order_type == $delivery_type || $shippingMethod->order_type == 'both')) {
-                        // Check if the shipping method has a delivery days attribute
-                    if ($shippingMethod && $shippingMethod->preperation_time > $maxPrepration) {
-                        $maxDays = $shippingMethod->days;
-                        $maxPrepration = $shippingMethod->preperation_time;
-                        $maxDaysshippingId = $shippingMethod->id;
-                    }
-                }
-            }
-        }
+//             if($shippingMethod){                           
+//                 if ($shippingMethod->name != 'Pickup' && $shippingMethod->name != 'Delivery' && ($shippingMethod->order_type == $delivery_type || $shippingMethod->order_type == 'both')) {
+//                         // Check if the shipping method has a delivery days attribute
+//                     if ($shippingMethod && $shippingMethod->preperation_time > $maxPrepration) {
+//                         $maxDays = $shippingMethod->days;
+//                         $maxPrepration = $shippingMethod->preperation_time;
+//                         $maxDaysshippingId = $shippingMethod->id;
+//                     }
+//                 }
+//             }
+//         }
     
-        // Store the maximum days for this item
-        // $maxShippingDays[$item->id] = $maxDays;
-    }
+//         // Store the maximum days for this item
+//         // $maxShippingDays[$item->id] = $maxDays;
+//     }
     
     
-    return $maxDaysshippingId;
-}
+//     return $maxDaysshippingId;
+// }
 
 
 

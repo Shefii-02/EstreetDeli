@@ -57,6 +57,7 @@ use App\Models\DeliveryPartner;
 use App\Models\ProductIngredient;
 use App\Models\Condiment;
 use App\Models\ProductCondiment;
+use App\Models\ShippingRule;
 
 
 
@@ -601,7 +602,7 @@ function action_activity_getdata($data){
                    }
                    
                 }
-                elseif($item->function == 'Shipping'){
+                 elseif($item->function == 'Shipping'){
                    
                    if($item->action == 'CREATE' || $item->action == 'UPDATE'){
                        
@@ -661,6 +662,24 @@ function action_activity_getdata($data){
                                    $co_ship->save();
                                }
                            }
+                           
+                           ShippingRule::where('shipping_id',$newone->id)->delete();
+                           							
+                            if(count($result->data->rules)>0){
+                               foreach($result->data->rules as $key2 => $rule){
+                                   $rule_ship                   = new ShippingRule();
+                                   $rule_ship->shipping_id      = $newone->id;
+                                   $rule_ship->day              = $rule->day;
+                                   $rule_ship->cutoff           = $rule->cutoff;
+                                   $rule_ship->after_day        = $rule->after_day;
+                                   $rule_ship->after_time       = $rule->after_time;
+                                   $rule_ship->before_day       = $rule->before_day;
+                                   $rule_ship->before_time      = $rule->before_time;
+                                   $rule_ship->status           = $rule->status;
+                                   $rule_ship->save();
+                               }
+                           }
+                           
                        }
                        catch(Exception $e){
                            dd($e->getMessage());
