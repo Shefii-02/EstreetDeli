@@ -604,15 +604,15 @@ i.del-selected {
             // Toggle calendar dropdown on button click
           
             $('body').on('click','.date-dropdown-toggle', function() {
-                $('.calendar-dropdown').toggleClass('d-none');
+                $('#calendar-dropdown').toggleClass('d-none');
             });
             
             
             
             $(document).click(function(event) {
                 var target = $(event.target);
-                if (!target.closest('.calendar-dropdown').length && !target.is('.date-dropdown-toggle')) {
-                  $('.calendar-dropdown').addClass('d-none');
+                if (!target.closest('#calendar-dropdown').length && !target.is('.date-dropdown-toggle')) {
+                  $('#calendar-dropdown').addClass('d-none');
                 //   $('.month-1').addClass('d-none');
                   $(".show-more-dates").text('More dates');
                 }
@@ -632,7 +632,7 @@ i.del-selected {
                 $('.date-input').text(formattedDate);
                 
                 $('.date-dropdown-toggle-value').val(selectedDate);
-                $('.calendar-dropdown').addClass('d-none');
+                $('#calendar-dropdown').addClass('d-none');
                 
                 pickuptimeListing(availableTime_on,availableTime_to)
                 
