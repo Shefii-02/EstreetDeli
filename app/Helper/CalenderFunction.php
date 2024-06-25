@@ -27,6 +27,9 @@ function ShippingMethodFinding($delivery_type){
     
     $session_string = session('session_string');						
     $basket_items   = Basket::where('session',$session_string)->where('status',0)->first();
+    if(!$basket_items){
+        return null;
+    }
     $items          = Item::with('productShipping','productShipping.shipping')->where('basket_id',$basket_items->id)->get();
     $maxShippingDays = [];
 
