@@ -406,7 +406,7 @@ i.del-selected {
                                 
                                 <div class="col-lg-12">
                                     <div class="mb-3">
-                                        {!! showPickupCalender('1','pickup') !!}
+                                        {!! ShippingRulePickupBasedCalender('1','pickup') !!}
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
