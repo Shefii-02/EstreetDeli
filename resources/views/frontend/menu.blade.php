@@ -667,21 +667,21 @@ i.del-selected {
                 $('.month-id-'+monthNo).show().removeClass('d-none');
             });
             
-            // $(".show-more-dates").click(function(e) {
+            $(".show-more-dates").click(function(e) {
 
-            //     $('.month-1').toggleClass('d-none');
-            //     e.preventDefault();
+                $('.month-1').toggleClass('d-none');
+                e.preventDefault();
     
                
-            //     var text = $(this).text();
+                var text = $(this).text();
     
-            //   if (text === 'Less dates') { 
-            //         $(this).text('More dates'); 
-            //     } else {
-            //         $(this).text('Less dates'); 
-            //     }
+              if (text === 'Less dates') { 
+                    $(this).text('More dates'); 
+                } else {
+                    $(this).text('Less dates'); 
+                }
 
-            // })
+            })
               
             function convert12HourTo24Hour(time12Hour) {
                 return moment(time12Hour, 'hh:mm A').format('HH:mm');
